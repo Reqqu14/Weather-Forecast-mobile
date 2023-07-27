@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 import { weatherImages } from "../constants/ImageConstants";
 
 Forecast = (params) => {
@@ -30,37 +30,39 @@ Forecast = (params) => {
 
 export default Forecast;
 
+const deviceHeight = Dimensions.get("window").height;
+
 const styles = StyleSheet.create({
   forecastContainer: {
     justifyContent: "flex-start",
     alignItems: "center",
-    marginTop: 50,
+    marginTop: deviceHeight < 570 ? 25 : 50,
   },
 
   forecastTown: {
     color: "white",
-    fontSize: 20,
+    fontSize: deviceHeight < 570 ? 16 : 20,
   },
 
   forecastCountry: {
-    fontSize: 14,
+    fontSize: deviceHeight < 570 ? 12 : 14,
   },
 
   forecastImage: {
-    marginTop: 50,
-    width: 200,
-    height: 200,
+    marginTop: deviceHeight < 570 ? 35 : 50,
+    width: deviceHeight < 570 ? 100 : 200,
+    height: deviceHeight < 570 ? 100 : 200,
   },
 
   degreeContainer: {
-    marginTop: 25,
+    marginTop: deviceHeight < 570 ? 15 : 25,
   },
 
   degree: {
-    fontSize: 48,
+    fontSize: deviceHeight < 570 ? 32 : 48,
     color: "white",
     textAlign: "center",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 
   degreeDescription: {

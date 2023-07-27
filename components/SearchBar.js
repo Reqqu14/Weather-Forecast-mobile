@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  Dimensions,
 } from "react-native";
 import { useCallback, useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -14,7 +15,6 @@ import { fetchLocations, fetchWeatherForecast } from "../api/WeatherApi";
 import { storeData } from "../utils/asyncStorage";
 import { getData } from "../utils/asyncStorage";
 
-
 SearchBar = (props) => {
   const [showSearch, setShowSearch] = useState(false);
   const [locations, setLocations] = useState([]);
@@ -22,7 +22,7 @@ SearchBar = (props) => {
   const handleLocations = (loc) => {
     setLocations([]);
     setShowSearch(false);
-    props.setLoading(true)
+    props.setLoading(true);
     fetchWeatherForecast({
       cityName: loc.name,
     }).then((data) => {
@@ -42,23 +42,21 @@ SearchBar = (props) => {
 
   useEffect(() => {
     fetchDefaultWeatherData();
-  }, [])
+  }, []);
 
   const fetchDefaultWeatherData = async () => {
-    let pickedCity = await getData("city")
-    let cityName = "Warsaw"
-    console.log(pickedCity)
-    if (pickedCity)
-    {
+    let pickedCity = await getData("city");
+    let cityName = "Warsaw";
+    if (pickedCity) {
       cityName = pickedCity;
     }
     fetchWeatherForecast({
-      cityName: cityName
-    }).then(data => {
-      props.pickLocation(data)
-      props.setLoading(false)
-    })
-  }
+      cityName: cityName,
+    }).then((data) => {
+      props.pickLocation(data);
+      props.setLoading(false);
+    });
+  };
 
   const handleTextDebounce = useCallback(debounce(handleSearch, 400), []);
 
@@ -71,9 +69,7 @@ SearchBar = (props) => {
             backgroundColor: showSearch
               ? "rgba(255, 255, 255, 0.2)"
               : "transparent",
-            display: props.visible
-              ? "none"
-              : "flex"
+            display: props.visible ? "none" : "flex",
           },
         ]}
       >
@@ -123,27 +119,29 @@ SearchBar = (props) => {
 
 export default SearchBar;
 
+const deviceHeight = Dimensions.get("window").height;
+
 const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 50,
+    marginTop: deviceHeight < 570 ? 30 : 50,
     borderRadius: 20,
-    paddingHorizontal: 20,
+    paddingHorizontal: deviceHeight < 570 ? 10 : 20,
     marginHorizontal: 20,
     padding: 10,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
-    height: 50,
+    height: deviceHeight < 570 ? 40 : 50,
   },
 
   searchInput: {
     color: "white",
-    width: "90%"
+    width: "90%",
   },
 
   searchInputContainer: {
-    padding: 11,
+    padding: deviceHeight < 570 ? 8 : 11,
     borderRadius: 80,
     position: "absolute",
     right: 1,
@@ -159,12 +157,12 @@ const styles = StyleSheet.create({
 
   locationsContainer: {
     flexDirection: "row",
-    padding: 15,
+    padding: deviceHeight < 570 ? 10 : 15,
   },
 
   locationText: {
     color: "black",
-    fontSize: 18,
+    fontSize: deviceHeight < 570 ? 16 : 18,
     marginLeft: 5,
   },
 });
